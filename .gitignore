@@ -2,4 +2,6 @@
 # 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
 ################################################################################
 
-/Code/.vs/GX.ManageSystem/v16
+/Code/.vs
+/Code/GX.ManageSystem.Portal/bin
+/Code/GX.ManageSystem.Portal/obj
