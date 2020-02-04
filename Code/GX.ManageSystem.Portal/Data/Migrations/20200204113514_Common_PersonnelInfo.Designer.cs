@@ -3,39 +3,23 @@ using System;
 using GX.ManageSystem.Portal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GX.ManageSystem.Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204113514_Common_PersonnelInfo")]
+    partial class Common_PersonnelInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("GX.ManageSystem.Portal.Models.UserModel.Common_DepartmentModel", b =>
-                {
-                    b.Property<int>("DepId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("DepName")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
-
-                    b.Property<int>("ParentNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("DepId");
-
-                    b.ToTable("Common_Department");
-                });
-
-            modelBuilder.Entity("GX.ManageSystem.Portal.Models.UserModel.Common_PersonnelInfoModel", b =>
+            modelBuilder.Entity("GX.ManageSystem.Portal.Models.User.Common_PersonnelInfoModel", b =>
                 {
                     b.Property<int>("PersonnelId")
                         .ValueGeneratedOnAdd()
