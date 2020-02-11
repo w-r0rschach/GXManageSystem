@@ -1,0 +1,69 @@
+﻿@model VMManageSystem.Models.VirtualMachine
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>VirtualMachine</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MachineIP" class="control-label"></label>
+                <input asp-for="MachineIP" class="form-control" />
+                <span asp-validation-for="MachineIP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineSystem" class="control-label"></label>
+                <select asp-for="MachineSystem" class="form-control">
+                    <option value="1">Windows</option>
+                    <option value="2">Linux</option>
+                </select>
+                <span asp-validation-for="MachineSystem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineDiskCount" class="control-label"></label>
+                <input asp-for="MachineDiskCount" class="form-control" />
+                <span asp-validation-for="MachineDiskCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineMemory" class="control-label"></label>
+                <input asp-for="MachineMemory" class="form-control" />
+                <span asp-validation-for="MachineMemory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineState" class="control-label"></label>
+                <select asp-for="MachineState" class="form-control">
+                    <option value="1">空闲</option>
+                    <option value="2">正在使用</option>
+                </select>
+                <span asp-validation-for="MachineState" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineUser" class="control-label"></label>
+                <input asp-for="MachineUser" class="form-control" />
+                <span asp-validation-for="MachineUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachinePassword" class="control-label"></label>
+                <input asp-for="MachinePassword" class="form-control" />
+                <span asp-validation-for="MachinePassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

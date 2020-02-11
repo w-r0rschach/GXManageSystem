@@ -1,0 +1,34 @@
+﻿body {
+    background: url(../img/backgroud-img.jpg) no-repeat;
+}
+
+/*.aaa {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 1000px;
+    z-index: -10;
+    zoom: 1;
+    background-color: #fff;
+    background: url(../img/backgroud-img.jpg) no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+}*/
+
+.login-box1 {
+    margin-left: 700px;
+    margin-top: 300px;
+    width: 500px;
+    height: 300px;
+}
+
+.btn-login {
+    background-image: url("../Img/login.png");
+    width: 73px;
+    height: 31px;
+    cursor:pointer;
+}

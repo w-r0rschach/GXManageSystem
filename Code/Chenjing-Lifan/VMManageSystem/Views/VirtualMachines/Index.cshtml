@@ -1,0 +1,97 @@
+﻿@model VMManageSystem.Models.VirtualMachineViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="VirtualMachines" asp-action="Index" method="get">
+    <p>
+        搜索：<input type="text" name="SearchString" />
+        <input type="submit" value="开始搜索" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Guid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VirtualMachines[0].PersonneId)
+                </th>
+            *@
+            <th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineIP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineSystem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineState)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineDiskCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineMemory)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].MachineUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].MachinePassword)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.VirtualMachines[0].ApplyAndReturnInfo.Personnel.PersonnelName)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VirtualMachines)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Guid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PersonneId)
+                    </td>
+                *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineIP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineSystem)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineState)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineUser)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachinePassword)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.MachineDiskCount)
+                    </td>
+                *@
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.ApplyAndReturnInfo.Personnel.PersonnelName)
+                </td>*@
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.MachineId">编辑</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.MachineId">续期</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MachineId">回收</a>|
+                    <a asp-action="Delete" asp-route-id="@item.MachineId">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
