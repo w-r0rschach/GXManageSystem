@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,6 +41,7 @@ namespace VMManageSystem.Models
         /// <summary>
         /// 虚拟机Id 外键
         /// </summary>
+        [ForeignKey("MachineId")]
         [Display(Name = "虚拟机Id")]
         public int MachineInfoID { get; set; }
 
@@ -72,6 +74,6 @@ namespace VMManageSystem.Models
         /// <summary>
         /// 虚拟机
         /// </summary>
-        public virtual VirtualMachine VirtualMachine { get; set; }
+        public virtual VirtualMachineModel VirtualMachine { get; set; }
     }
 }

@@ -127,6 +127,6 @@ namespace VMManageSystem.Models
         /// <summary>
         /// 申请归还列表
         /// </summary>
-        public List<ApprovalModel> ApplyAndReturnInfos { get; set; }
+        public List<ApprovalModel> Approvals { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace VMManageSystem.Data
         /// <summary>
         /// 用于数据库建表
         /// </summary>
-        public DbSet<VMManageSystem.Models.VirtualMachine> MachineInfo { get; set; }
+        public DbSet<VMManageSystem.Models.VirtualMachineModel> MachineInfo { get; set; }
 
         /// <summary>
         /// 用于数据库建表
@@ -35,19 +35,40 @@ namespace VMManageSystem.Data
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ApprovalModel>()
-            .HasKey(t => new { t.ApplyUserID, t.ExamineUserID, t.MachineInfoID });
+            //modelBuilder.Entity<PersonnelModel>()
+            //    .HasKey(p => p.PersonnelId);
+            //modelBuilder.Entity<VirtualMachineModel>()
+            //    .HasKey(v => v.MachineId);
+            //modelBuilder.Entity<ApprovalModel>()
+            //    .HasKey(a => a.ApplyAndReturnId);
 
-            modelBuilder.Entity<ApprovalModel>()
-                .HasOne(pt => pt.Personnel)
-                .WithMany(p => p.ApplyAndReturnInfos)
-                .HasForeignKey(pt => pt.ApplyUserID)
-                .HasForeignKey(pt => pt.ExamineUserID);
+            //modelBuilder.Entity<PersonnelModel>()
+            //    .HasMany(p => p.ApprovalModels);
+            //modelBuilder.Entity<VirtualMachineModel>()
+            //    .HasMany(v => v.Personnels);
+            //modelBuilder.Entity<VirtualMachineModel>()
+            //    .HasMany(v => v.Approvals);
+
+
+
+            //modelBuilder.Entity<ApprovalModel>()
+            //.HasKey(t => t.ApplyAndReturnId);
+
+            //modelBuilder.Entity<ApprovalModel>()
+            //    .HasOne(pt => pt.Personnel)
+            //    .WithMany(p => p.Approvals)
+            //    .HasForeignKey(pt => pt.ApplyUserID)
+            //    .HasForeignKey(pt => pt.ExamineUserID);
 
             modelBuilder.Entity<ApprovalModel>()
                 .HasOne(pt => pt.VirtualMachine)
-                .WithMany(t => t.Approvals)
+                .WithMany(p => p.Approvals)
                 .HasForeignKey(pt => pt.MachineInfoID);
+
+            //modelBuilder.Entity<ApprovalModel>()
+            //    .HasOne(pt => pt.VirtualMachine)
+            //    .WithMany(t => t.Approvals)
+            //    .HasForeignKey(pt => pt.MachineInfoID);
             //base.OnModelCreating(modelBuilder);
         }
     }

@@ -41,6 +41,21 @@ namespace VMManageSystem.Controllers
                 VirtualMachines = await virtualMachines.ToListAsync()
             };
 
+
+            var s = from m in _context.Common_PersonnelInfo
+                    select m;
+            var a = s.ToList();
+
+            var n = from j in _context.MachApplyAndReturn
+                    select j;
+            var p = n.ToList();
+
+            //foreach (VirtualMachineModel model in vmModels.VirtualMachines)
+            //{
+            //    var d = p.Find(o => o.MachineInfoID.Equals(model.MachineId));
+            //    var c = a.Find(o => o.PersonnelId.Equals(d.ApplyUserID));
+            //    vmModels.Name = c.PersonnelName;
+            //}
             return View(vmModels);
         }
 
@@ -84,17 +99,18 @@ namespace VMManageSystem.Controllers
         // GET: VirtualMachines/Create
         public IActionResult Create()
         {
-            var virtualMachines = from m in _context.MachineInfo
-                                  select m;
-            OperatingSystemEnum[] operatingSystem = new OperatingSystemEnum[2];
-            operatingSystem[0] = OperatingSystemEnum.Windows;
-            operatingSystem[1] = OperatingSystemEnum.Linux;
-            VirtualMachineViewModel vmModels = new VirtualMachineViewModel()
-            {
-                OperationSystem = new SelectList(operatingSystem),
-                VirtualMachines = virtualMachines.ToList()
-            };
+            //var virtualMachines = from m in _context.MachineInfo
+            //                      select m;
+            //OperatingSystemEnum[] operatingSystem = new OperatingSystemEnum[2];
+            //operatingSystem[0] = OperatingSystemEnum.Windows;
+            //operatingSystem[1] = OperatingSystemEnum.Linux;
+            //VirtualMachineViewModel vmModels = new VirtualMachineViewModel()
+            //{
+            //    OperationSystem = new SelectList(operatingSystem),
+            //    VirtualMachines = virtualMachines.ToList()
+            //};
 
+            //return View(vmModels);
             return View();
         }
 
@@ -103,15 +119,23 @@ namespace VMManageSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MachineId,Guid,PersonneId,MachineIP,MachineSystem,MachineDiskCount,MachineMemory,MachineState,MachineUser,MachinePassword")] VirtualMachine virtualMachine)
+        public async Task<IActionResult> Create([Bind("MachineIP,MachineSystem,MachineDiskCount,MachineMemory,MachineState,MachineUser,MachinePassword")] List<VirtualMachineModel> virtualMachines)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(virtualMachine);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(virtualMachine);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(virtualMachine);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(virtualMachine);
+            await _context.SaveChangesAsync();
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        public void TestOne(List<string> name)
+        {
+
         }
 
         // GET: VirtualMachines/Edit/5
@@ -135,7 +159,7 @@ namespace VMManageSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MachineId,Guid,PersonneId,MachineIP,MachineSystem,MachineDiskCount,MachineMemory,MachineState,MachineUser,MachinePassword")] VirtualMachine virtualMachine)
+        public async Task<IActionResult> Edit(int id, [Bind("MachineId,Guid,PersonneId,MachineIP,MachineSystem,MachineDiskCount,MachineMemory,MachineState,MachineUser,MachinePassword")] VirtualMachineModel virtualMachine)
         {
             if (id != virtualMachine.MachineId)
             {

@@ -1,68 +1,144 @@
-﻿@model VMManageSystem.Models.VirtualMachine
+﻿@model VMManageSystem.Models.VirtualMachineModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<script type="text/javascript">
+    function addInputControl() {
+        var tb=document.getElementById("creating-vm-table");
 
-<h4>VirtualMachine</h4>
+　　　　var newTr=tb.insertRow(2);//表示在第二行后添加一行
+
+　　　　var newTdIP=newTr.insertCell();//表示在添加的行上添加第一格
+　　　　//newTdIP.innerHTML="邮箱:";
+　　　　//var newTd2=newTr.insertCell();//表示在添加的行上添加第二格
+        newTdIP.innerHTML = "<input asp-for='MachineIP' class='form-control' name='machineIP' />";
+
+　　　　var newTdSystem=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdSystem.innerHTML = "<select class='form-control' asp-for='MachineSystem' name='machineSystem'>";
+        
+　　　　var newTdDisk=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdDisk.innerHTML = "<input asp-for='MachineDiskCount' class='form-control' name='machineDiskCount' />";
+        
+　　　　var newTdMemory=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdMemory.innerHTML = "<input asp-for='MachineMemory' class='form-control' name='machineMemory' />";
+
+　　　　var newTdState=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdState.innerHTML = "<select asp-for='MachineState' class='form-control'>";
+        
+　　　　var newTdUser=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdUser.innerHTML = "<input asp-for='MachineUser' class='form-control' />";
+
+　　　　var newTdPwd=newTr.insertCell();//表示在添加的行上添加第一格
+        newTdPwd.innerHTML = "<input asp-for='MachinePassword' class='form-control' />";
+        
+
+    }
+</script>
+
+<link href="/css/CreateVMStyle.css" rel="stylesheet" />
+<h1>添加虚拟机</h1>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MachineIP" class="control-label"></label>
-                <input asp-for="MachineIP" class="form-control" />
-                <span asp-validation-for="MachineIP" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineSystem" class="control-label"></label>
-                <select asp-for="MachineSystem" class="form-control">
-                    <option value="1">Windows</option>
-                    <option value="2">Linux</option>
+@*<div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="MachineIP" class="control-label"></label>
+                    <input asp-for="MachineIP" class="form-control" />
+                    <span asp-validation-for="MachineIP" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachineSystem" class="control-label"></label>
+                    <select asp-for="MachineSystem" class="form-control">
+                        <option value="1">Windows</option>
+                        <option value="2">Linux</option>
+                    </select>
+                    <span asp-validation-for="MachineSystem" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachineDiskCount" class="control-label"></label>
+                    <input asp-for="MachineDiskCount" class="form-control" />
+                    <span asp-validation-for="MachineDiskCount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachineMemory" class="control-label"></label>
+                    <input asp-for="MachineMemory" class="form-control" />
+                    <span asp-validation-for="MachineMemory" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachineState" class="control-label"></label>
+                    <select asp-for="MachineState" class="form-control">
+                        <option value="1">空闲</option>
+                        <option value="2">正在使用</option>
+                    </select>
+                    <span asp-validation-for="MachineState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachineUser" class="control-label"></label>
+                    <input asp-for="MachineUser" class="form-control" />
+                    <span asp-validation-for="MachineUser" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MachinePassword" class="control-label"></label>
+                    <input asp-for="MachinePassword" class="form-control" />
+                    <span asp-validation-for="MachinePassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>*@
+<form asp-action="Create">
+    <table id="creating-vm-table">
+        <tr>
+            <td style="width:150px"><b><label asp-for="MachineIP" class="control-label"></label></b></td>
+            <td style="width:100px"><b><label asp-for="MachineSystem" class="control-label"></label></b></td>
+            <td style="width:150px"><b><label asp-for="MachineDiskCount" class="control-label"></label></b></td>
+            <td style="width:150px"><b><label asp-for="MachineMemory" class="control-label"></label></b></td>
+            <td style="width:100px"><b><label asp-for="MachineState" class="control-label"></label></b></td>
+            <td style="width:150px"><b><label asp-for="MachineUser" class="control-label"></label></b></td>
+            <td style="width:150px"><b><label asp-for="MachinePassword" class="control-label"></label></b></td>
+        </tr>
+        <tr id="a">
+            <td><input asp-for="MachineIP" class="form-control" name="machineIP" /></td>
+            <td>
+                <select class="form-control" asp-for="MachineSystem" name="machineSystem">
+                    <option value="0">Windows</option>
+                    <option value="1">Linux</option>
                 </select>
-                <span asp-validation-for="MachineSystem" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineDiskCount" class="control-label"></label>
-                <input asp-for="MachineDiskCount" class="form-control" />
-                <span asp-validation-for="MachineDiskCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineMemory" class="control-label"></label>
-                <input asp-for="MachineMemory" class="form-control" />
-                <span asp-validation-for="MachineMemory" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineState" class="control-label"></label>
+            </td>
+            <td><input asp-for="MachineDiskCount" class="form-control" name="machineDiskCount" /></td>
+            <td><input asp-for="MachineMemory" class="form-control" name="machineMemory" /></td>
+            <td>
                 <select asp-for="MachineState" class="form-control">
-                    <option value="1">空闲</option>
-                    <option value="2">正在使用</option>
+                    <option value="0">无</option>
+                    <option value="1">正在使用</option>
                 </select>
-                <span asp-validation-for="MachineState" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineUser" class="control-label"></label>
-                <input asp-for="MachineUser" class="form-control" />
-                <span asp-validation-for="MachineUser" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachinePassword" class="control-label"></label>
-                <input asp-for="MachinePassword" class="form-control" />
-                <span asp-validation-for="MachinePassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+            </td>
+            <td><input asp-for="MachineUser" class="form-control" /></td>
+            <td><input asp-for="MachinePassword" class="form-control" /></td>
+        </tr>
+    </table>
+    <input id="ss" type="button" style="margin-left:500px" value="+" class="btn btn-primary" onclick="addInputControl()" />
+    <br />
+    <input type="submit" value="添加虚拟机" class="btn btn-primary" asp-controller="VirtualMachines" />
+    <span class="text-danger"></span>
+    <input type="submit" value="返回列表" class="btn btn-primary" asp-action="Index" />
+    <div id="org"></div>
+</form>
+@*<form action="@Url.Action("TestOne")" method="post">
+        <div class="form-group">
+            <input name="name" value="张三" />
+        </div>
+        <div class="form-group">
+            <input name="name" value="李四" />
+        </div>
+        <input class="btn btn-success" type="submit" value="提交" />
+    </form>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

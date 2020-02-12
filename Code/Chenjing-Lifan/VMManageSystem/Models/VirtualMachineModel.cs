@@ -10,7 +10,7 @@ namespace VMManageSystem.Models
     /// <summary>
     /// 虚拟机模型
     /// </summary>
-    public class VirtualMachine
+    public class VirtualMachineModel
     {
         /// <summary>
         /// 主键Id
@@ -75,9 +75,9 @@ namespace VMManageSystem.Models
         /// </summary>
         public List<ApprovalModel> Approvals { get; set; }
 
-        /// <summary>
-        /// 员工信息
-        /// </summary>
-        public List<PersonnelModel> Personnels { get; set; }
+        ///// <summary>
+        ///// 员工信息
+        ///// </summary>
+        //public List<PersonnelModel> Personnels { get; set; }
     }
 }

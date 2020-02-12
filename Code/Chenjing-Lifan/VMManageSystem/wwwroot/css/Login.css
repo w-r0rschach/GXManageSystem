@@ -1,5 +1,5 @@
 ﻿body {
-    background: url(../img/backgroud-img.jpg) no-repeat;
+    /*background: url(../img/backgroud-img.jpg) no-repeat;*/
 }
 
 /*.aaa {
@@ -27,7 +27,6 @@
 }
 
 .btn-login {
-    background-image: url("../Img/login.png");
     width: 73px;
     height: 31px;
     cursor:pointer;

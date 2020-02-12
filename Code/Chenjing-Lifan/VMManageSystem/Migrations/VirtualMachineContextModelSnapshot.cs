@@ -19,7 +19,47 @@ namespace VMManageSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("VMManageSystem.Models.Common_PersonnelInfo", b =>
+            modelBuilder.Entity("VMManageSystem.Models.ApprovalModel", b =>
+                {
+                    b.Property<int>("ApplyAndReturnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ApplyTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ApplyUserID")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("ExamineResult")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ExamineUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MachineInfoID")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("OprationType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("PersonnelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ResultTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ApplyAndReturnId");
+
+                    b.HasIndex("MachineInfoID");
+
+                    b.HasIndex("PersonnelId");
+
+                    b.ToTable("MachApplyAndReturn");
+                });
+
+            modelBuilder.Entity("VMManageSystem.Models.PersonnelModel", b =>
                 {
                     b.Property<int>("PersonnelId")
                         .ValueGeneratedOnAdd()
@@ -86,55 +126,15 @@ namespace VMManageSystem.Migrations
                     b.Property<DateTime>("TrialTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("VirtualMachineMachineId")
-                        .HasColumnType("int");
-
                     b.Property<string>("WeChatAccount")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonnelId");
 
-                    b.HasIndex("VirtualMachineMachineId");
-
                     b.ToTable("Common_PersonnelInfo");
                 });
 
-            modelBuilder.Entity("VMManageSystem.Models.MachApplyAndReturn", b =>
-                {
-                    b.Property<int>("ApplyUserID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExamineUserID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MachineInfoID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ApplyAndReturnId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ApplyTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("ExamineResult")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("OprationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime>("ResultTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ApplyUserID", "ExamineUserID", "MachineInfoID");
-
-                    b.HasIndex("ExamineUserID");
-
-                    b.HasIndex("MachineInfoID");
-
-                    b.ToTable("MachApplyAndReturn");
-                });
-
-            modelBuilder.Entity("VMManageSystem.Models.VirtualMachine", b =>
+            modelBuilder.Entity("VMManageSystem.Models.VirtualMachineModel", b =>
                 {
                     b.Property<int>("MachineId")
                         .ValueGeneratedOnAdd()
@@ -169,26 +169,17 @@ namespace VMManageSystem.Migrations
                     b.ToTable("MachineInfo");
                 });
 
-            modelBuilder.Entity("VMManageSystem.Models.Common_PersonnelInfo", b =>
+            modelBuilder.Entity("VMManageSystem.Models.ApprovalModel", b =>
                 {
-                    b.HasOne("VMManageSystem.Models.VirtualMachine", null)
-                        .WithMany("PersonnelInfos")
-                        .HasForeignKey("VirtualMachineMachineId");
-                });
-
-            modelBuilder.Entity("VMManageSystem.Models.MachApplyAndReturn", b =>
-                {
-                    b.HasOne("VMManageSystem.Models.Common_PersonnelInfo", "Personnel")
-                        .WithMany("ApplyAndReturnInfos")
-                        .HasForeignKey("ExamineUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VMManageSystem.Models.VirtualMachine", "VirtualMachine")
-                        .WithMany("ApplyAndReturnInfos")
+                    b.HasOne("VMManageSystem.Models.VirtualMachineModel", "VirtualMachine")
+                        .WithMany("Approvals")
                         .HasForeignKey("MachineInfoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("VMManageSystem.Models.PersonnelModel", "Personnel")
+                        .WithMany("Approvals")
+                        .HasForeignKey("PersonnelId");
                 });
 #pragma warning restore 612, 618
         }

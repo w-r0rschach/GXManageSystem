@@ -11,7 +11,7 @@ namespace VMManageSystem.Models
         /// <summary>
         /// 虚拟机列表
         /// </summary>
-        public List<VirtualMachine> VirtualMachines { get; set; }
+        public List<VirtualMachineModel> VirtualMachines { get; set; }
 
         /// <summary>
         /// 搜索内容
@@ -19,8 +19,15 @@ namespace VMManageSystem.Models
         public string SearchString { get; set; }
 
         /// <summary>
+        /// 电影种类
+        /// </summary>
+        public string MovieGenre { get; set; }
+
+        /// <summary>
         /// 操作系统
         /// </summary>
         public SelectList OperationSystem { get; set; }
+
+        public string Name { get; set; }
     }
 }
