@@ -14,6 +14,11 @@ namespace VMManageSystem.Models
         public List<VirtualMachineModel> VirtualMachines { get; set; }
 
         /// <summary>
+        /// 员工信息列表
+        /// </summary>
+        public List<PersonnelModel> Personnels { get; set; }
+
+        /// <summary>
         /// 搜索内容
         /// </summary>
         public string SearchString { get; set; }

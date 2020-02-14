@@ -17,6 +17,11 @@ namespace VMManageSystem.Models
         /// </summary>
         public List<ApprovalModel> Approvals { get; set; }
 
+        /// <summary>
+        /// 员工信息
+        /// </summary>
+        public List<PersonnelModel> Personnels { get; set; }
+
         private int _usedDays;
         /// <summary>
         /// 使用天数

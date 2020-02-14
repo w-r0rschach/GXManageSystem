@@ -19,9 +19,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Approval.OprationType)
-            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Approval.OprationType)
+                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Approval.ApplyUserID)
             </th>
@@ -47,14 +47,14 @@
         @foreach (var item in Model.Approvals)
         {
             <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.OprationType)
+                    </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.OprationType)
+                    @Html.DisplayFor(modelItem => Model.Personnels.Find(o => o.PersonnelId == item.ApplyUserID).PersonnelName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ApplyUserID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ExamineUserID)
+                    @Html.DisplayFor(modelItem => Model.Personnels.Find(o => o.PersonnelId == item.ExamineUserID).PersonnelName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ExamineResult)
@@ -69,10 +69,10 @@
                     @Html.DisplayFor(modelitem => item.Remark)
                 </td>
                 @{
-                    if (item.ExamineResult != VMManageSystem.Data.ApprovalResultEnum.Pass)
+                    if (item.ExamineResult == VMManageSystem.Data.ApprovalResultEnum.Approving)
                     {
                         <td>
-                            <a asp-action="Agree" asp-route-id="@item.ApplyAndReturnId">通过</a> |
+                            <a asp-action="Agree" asp-route-id="@item.ApplyAndReturnId" asp-route-os="0">通过</a> |
                             <a asp-action="Disagree" asp-route-id="@item.ApplyAndReturnId">拒绝</a>
                         </td>
                     }

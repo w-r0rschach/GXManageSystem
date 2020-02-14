@@ -11,7 +11,7 @@ namespace VMManageSystem.Models
     /// <summary>
     /// 审批单
     /// </summary>
-    public class ApprovalModel
+    public class ApprovalModel:ICloneable
     {
         /// <summary>
         /// 主键
@@ -82,5 +82,26 @@ namespace VMManageSystem.Models
         /// 虚拟机
         /// </summary>
         public virtual VirtualMachineModel VirtualMachine { get; set; }
+
+        /// <summary>
+        /// 克隆
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            return new ApprovalModel()
+            {
+                ApplyTime = ApplyTime,
+                ApplyUserID = ApplyUserID,
+                ExamineResult = ExamineResult,
+                ExamineUserID = ExamineUserID,
+                MachineInfoID = MachineInfoID,
+                OprationType = OprationType,
+                Personnel = Personnel,
+                Remark = Remark,
+                ResultTime = ResultTime,
+                VirtualMachine = VirtualMachine
+            };
+        }
     }
 }

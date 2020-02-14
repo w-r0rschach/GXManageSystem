@@ -87,7 +87,17 @@
                       @Html.DisplayFor(modelItem => item.Approvals)
                     </td>*@
                 <td>
-                    @Html.DisplayFor(modelitem => item.Approvals.Find(o => o.MachineInfoID == item.MachineId).Personnel.PersonnelName)
+                    @{
+                        ApprovalModel approval = item.Approvals.Find(o => o.MachineInfoID == item.MachineId);
+                        if (approval != null)
+                        {
+                            PersonnelModel personnel = Model.Personnels.Find(o => o.PersonnelId == approval.ApplyUserID);
+                            if (personnel != null)
+                            {
+                                @Html.DisplayFor(modelItem => personnel.PersonnelName)
+                            }
+                        }
+                    }
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.MachineId">编辑</a> |*@

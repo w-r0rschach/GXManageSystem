@@ -10,6 +10,9 @@ using VMManageSystem.Models;
 
 namespace VMManageSystem.Controllers
 {
+    /// <summary>
+    /// 虚拟机控制器
+    /// </summary>
     public class VirtualMachinesController : Controller
     {
         private readonly VirtualMachineContext _context;
@@ -39,10 +42,12 @@ namespace VMManageSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Apply([Bind("Approval,UsedDays,UsedCount")] ApprovalViewModel approvalView)
         {
-
-            _context.MachApplyAndReturn.Add(approvalView.Approval);
+            for (int i = 0; i < approvalView.UsedCount; i++)
+            {
+                _context.MachApplyAndReturn.Add((ApprovalModel)approvalView.Approval.Clone());
+            }
             await _context.SaveChangesAsync();
-            return RedirectToAction("index");
+            return RedirectToAction(nameof(ApprovalDetails));
         }
 
         /// <summary>
@@ -51,11 +56,16 @@ namespace VMManageSystem.Controllers
         /// <returns></returns>
         public IActionResult ApprovalDetails()
         {
-            var n = from j in _context.MachApplyAndReturn
-                    select j;
+            //查询所有审批单
+            var approvals = from m in _context.MachApplyAndReturn
+                            select m;
+            //查询所有员工
+            var personnels = from m in _context.Common_PersonnelInfo
+                             select m;
             ApprovalViewModel model = new ApprovalViewModel()
             {
-                Approvals = n.ToList()
+                Approvals = approvals.ToList(),
+                Personnels = personnels.ToList()
             };
             return View(model);
         }
@@ -69,14 +79,28 @@ namespace VMManageSystem.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult Agree(int? id)
+        public IActionResult Agree(int? id, int? os)
         {
+            //查询所有审批单
             var approvals = from m in _context.MachApplyAndReturn
-                    where m.ApplyAndReturnId == id
-                    select m;
-            if (approvals.Any()) 
+                            where m.ApplyAndReturnId == id
+                            select m;
+            //查询所有符合条件的虚拟机Id
+            var vmIds = from m in _context.MachineInfo
+                        where m.MachineSystem == (OperatingSystemEnum)os &&
+                        m.MachineState != MachineStatueEnum.BeingUsed
+                        select m.MachineId;
+            //查询所有审批单中虚拟机Id
+            var appVMIds = from m in _context.MachApplyAndReturn
+                           where m.MachineInfoID != 1
+                           select m.MachineInfoID;
+            //取差集
+            var exIds = vmIds.Except(appVMIds);
+
+            if (approvals.Any())
             {
                 approvals.ToArray()[0].ExamineResult = ApprovalResultEnum.Pass;
+                approvals.ToArray()[0].MachineInfoID = exIds.ToArray()[0];
                 _context.SaveChanges();
             }
             return RedirectToAction(nameof(ApprovalDetails));
@@ -150,20 +174,21 @@ namespace VMManageSystem.Controllers
             };
 
 
-            var s = from m in _context.Common_PersonnelInfo
+            var personnels = from m in _context.Common_PersonnelInfo
                     select m;
-            var a = s.ToList();
 
-            var n = from j in _context.MachApplyAndReturn
-                    select j;
-            var p = n.ToList();
+            vmModels.Personnels = personnels.ToList();
 
-            //foreach (VirtualMachineModel model in vmModels.VirtualMachines)
-            //{
-            //    var d = p.Find(o => o.MachineInfoID.Equals(model.MachineId));
-            //    var c = a.Find(o => o.PersonnelId.Equals(d.ApplyUserID));
-            //    vmModels.Name = c.PersonnelName;
-            //}
+            //var a = personnels.ToList();
+
+            var vmLst = from m in _context.MachApplyAndReturn
+                    select m;
+            //var p = n.ToList();
+
+            foreach (VirtualMachineModel model in vmModels.VirtualMachines)
+            {
+                model.Approvals = vmLst.ToList();
+            }
             return View(vmModels);
         }
 
