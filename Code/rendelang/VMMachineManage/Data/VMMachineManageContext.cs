@@ -12,9 +12,13 @@ namespace VMMachineManage.Data
         public VMMachineManageContext (DbContextOptions<VMMachineManageContext> options)
             : base(options)
         {
+
         }
 
-        public DbSet<VMMachineManage.Models.Common_PersonnelInfoModel> Common_PersonnelInfo { get; set; }
+        public DbSet<PersonnelInfoModel> Common_PersonnelInfo { get; set; }
         public DbSet<Common_DepartmentModel> Common_Department { get; set; }
+        public DbSet<MachineInfoModel> MachineInfo { get; set; }
+
+        public DbSet<MachApplyAndReturnModel> MachApplyAndReturn { get; set; }
     }
 }

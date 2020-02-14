@@ -1,0 +1,69 @@
+﻿@model VMMachineManage.Models.MachApplyAndReturnModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MachApplyAndReturnModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ApplyAndReturnId" />
+            <div class="form-group">
+                <label asp-for="OprationType" class="control-label"></label>
+                <select asp-for="OprationType" class="form-control"></select>
+                <span asp-validation-for="OprationType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplyUserID" class="control-label"></label>
+                <input asp-for="ApplyUserID" class="form-control" />
+                <span asp-validation-for="ApplyUserID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExamineUserID" class="control-label"></label>
+                <input asp-for="ExamineUserID" class="form-control" />
+                <span asp-validation-for="ExamineUserID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MachineInfoID" class="control-label"></label>
+                <input asp-for="MachineInfoID" class="form-control" />
+                <span asp-validation-for="MachineInfoID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExamineResult" class="control-label"></label>
+                <input asp-for="ExamineResult" class="form-control" />
+                <span asp-validation-for="ExamineResult" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplyTime" class="control-label"></label>
+                <input asp-for="ApplyTime" class="form-control" />
+                <span asp-validation-for="ApplyTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResultTime" class="control-label"></label>
+                <input asp-for="ResultTime" class="form-control" />
+                <span asp-validation-for="ResultTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remark" class="control-label"></label>
+                <input asp-for="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

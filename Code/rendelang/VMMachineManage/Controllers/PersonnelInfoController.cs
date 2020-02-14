@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +22,12 @@ namespace VMMachineManage.Controllers
         }
 
         // GET: PersonnelInfo
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Common_PersonnelInfo.ToListAsync());
+            var personnelInfo = from m in _context.Common_PersonnelInfo select m;
+
+            return View(await personnelInfo.ToListAsync());
         }
 
         // GET: PersonnelInfo/Details/5
@@ -33,14 +38,14 @@ namespace VMMachineManage.Controllers
                 return NotFound();
             }
 
-            var common_PersonnelInfoModel = await _context.Common_PersonnelInfo
+            var PersonnelInfoModel = await _context.Common_PersonnelInfo
                 .FirstOrDefaultAsync(m => m.PersonnelId == id);
-            if (common_PersonnelInfoModel == null)
+            if (PersonnelInfoModel == null)
             {
                 return NotFound();
             }
 
-            return View(common_PersonnelInfoModel);
+            return View(PersonnelInfoModel);
         }
 
         // GET: PersonnelInfo/Create
@@ -54,15 +59,15 @@ namespace VMMachineManage.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonnelId,PassWord,PersonnelNo,PersonnelName,DepId,Avatar,PersonnelSex,BirthDate,IdentityCard,IsWork,Nation,MaritalStatus,LiveAddress,Phone,WeChatAccount,Mailbox,Degree,Address,OnBoarDingTime,DepartureTime,TrialTime,IsStruggle,IsSecrecy")] Common_PersonnelInfoModel common_PersonnelInfoModel)
+        public async Task<IActionResult> Create([Bind("PersonnelId,PassWord,PersonnelNo,PersonnelName,DepId,Avatar,PersonnelSex,BirthDate,IdentityCard,IsWork,Nation,MaritalStatus,LiveAddress,Phone,WeChatAccount,Mailbox,Degree,Address,OnBoarDingTime,DepartureTime,TrialTime,IsStruggle,IsSecrecy")] PersonnelInfoModel PersonnelInfoModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(common_PersonnelInfoModel);
+                _context.Add(PersonnelInfoModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(common_PersonnelInfoModel);
+            return View(PersonnelInfoModel);
         }
 
         // GET: PersonnelInfo/Edit/5
@@ -73,12 +78,12 @@ namespace VMMachineManage.Controllers
                 return NotFound();
             }
 
-            var common_PersonnelInfoModel = await _context.Common_PersonnelInfo.FindAsync(id);
-            if (common_PersonnelInfoModel == null)
+            var PersonnelInfoModel = await _context.Common_PersonnelInfo.FindAsync(id);
+            if (PersonnelInfoModel == null)
             {
                 return NotFound();
             }
-            return View(common_PersonnelInfoModel);
+            return View(PersonnelInfoModel);
         }
 
         // POST: PersonnelInfo/Edit/5
@@ -86,9 +91,9 @@ namespace VMMachineManage.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonnelId,PassWord,PersonnelNo,PersonnelName,DepId,Avatar,PersonnelSex,BirthDate,IdentityCard,IsWork,Nation,MaritalStatus,LiveAddress,Phone,WeChatAccount,Mailbox,Degree,Address,OnBoarDingTime,DepartureTime,TrialTime,IsStruggle,IsSecrecy")] Common_PersonnelInfoModel common_PersonnelInfoModel)
+        public async Task<IActionResult> Edit(int id, [Bind("PersonnelId,PassWord,PersonnelNo,PersonnelName,DepId,Avatar,PersonnelSex,BirthDate,IdentityCard,IsWork,Nation,MaritalStatus,LiveAddress,Phone,WeChatAccount,Mailbox,Degree,Address,OnBoarDingTime,DepartureTime,TrialTime,IsStruggle,IsSecrecy")] PersonnelInfoModel PersonnelInfoModel)
         {
-            if (id != common_PersonnelInfoModel.PersonnelId)
+            if (id != PersonnelInfoModel.PersonnelId)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace VMMachineManage.Controllers
             {
                 try
                 {
-                    _context.Update(common_PersonnelInfoModel);
+                    _context.Update(PersonnelInfoModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!Common_PersonnelInfoModelExists(common_PersonnelInfoModel.PersonnelId))
+                    if (!PersonnelInfoModelExists(PersonnelInfoModel.PersonnelId))
                     {
                         return NotFound();
                     }
@@ -113,7 +118,7 @@ namespace VMMachineManage.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(common_PersonnelInfoModel);
+            return View(PersonnelInfoModel);
         }
 
         // GET: PersonnelInfo/Delete/5
@@ -124,14 +129,14 @@ namespace VMMachineManage.Controllers
                 return NotFound();
             }
 
-            var common_PersonnelInfoModel = await _context.Common_PersonnelInfo
+            var PersonnelInfoModel = await _context.Common_PersonnelInfo
                 .FirstOrDefaultAsync(m => m.PersonnelId == id);
-            if (common_PersonnelInfoModel == null)
+            if (PersonnelInfoModel == null)
             {
                 return NotFound();
             }
 
-            return View(common_PersonnelInfoModel);
+            return View(PersonnelInfoModel);
         }
 
         // POST: PersonnelInfo/Delete/5
@@ -139,13 +144,13 @@ namespace VMMachineManage.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var common_PersonnelInfoModel = await _context.Common_PersonnelInfo.FindAsync(id);
-            _context.Common_PersonnelInfo.Remove(common_PersonnelInfoModel);
+            var PersonnelInfoModel = await _context.Common_PersonnelInfo.FindAsync(id);
+            _context.Common_PersonnelInfo.Remove(PersonnelInfoModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool Common_PersonnelInfoModelExists(int id)
+        private bool PersonnelInfoModelExists(int id)
         {
             return _context.Common_PersonnelInfo.Any(e => e.PersonnelId == id);
         }

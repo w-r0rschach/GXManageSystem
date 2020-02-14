@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,7 @@ namespace VMMachineManage.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+       
         /// <summary>
         /// 登录方法
         /// 实现思路：根据界面填入的值如果和默认的用户名和密码不同则无法登录
@@ -50,31 +52,34 @@ namespace VMMachineManage.Controllers
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Login(string user, string pwd)
-        {
+        { 
+            
             if (string.IsNullOrWhiteSpace(user))
             {
                 return BadRequest("请输入用户名或密码!");
             }
-            //var loginuser = await _context.Common_PersonnelInfo.
-            //    FirstOrDefaultAsync(s => s.PersonnelName == user);
-            if (user !="admin")
+            var loginuser = await _context.Common_PersonnelInfo.
+                FirstOrDefaultAsync(s => s.UserName == user);
+            if (user != loginuser.UserName)
             {
-               // System.Net.Http.HttpRequestMessage
+                // System.Net.Http.HttpRequestMessage
                 return BadRequest("没有该用户!");
             }
-            if (pwd!="123456")
+            if (pwd != loginuser.PassWord)
             {
                 return BadRequest("密码错误!");
             }
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Name,user)
-            //};
-            //ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "login");
-            //ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-            //await HttpContext.SignInAsync(principal);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name,user),
+                new Claim(ClaimTypes.Sid,loginuser.PersonnelId.ToString())
+            };
+            ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "login");
+            ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
 
-            return RedirectToAction("Index", "PersonnelInfo");
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToAction("Index", "MachineInfo");
         }
     }
 }

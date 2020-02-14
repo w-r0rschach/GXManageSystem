@@ -1,0 +1,70 @@
+﻿@model VMMachineManage.Models.MachineInfoViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="" asp-action="">
+    <p>
+        <input type="text" name="searchString" />
+        <input class="btn btn-primary" type="submit" value="搜索" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineSystem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineDiskCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineMemory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachApplyAndReturnInfo.OprationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachApplyAndReturnInfo.ExamineResult)
+            </th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MachineInfo) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineSystem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineDiskCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineMemory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachApplyAndReturnInfo.OprationType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachApplyAndReturnInfo.ExamineResult)
+            </td>
+            <td>
+                <a class="btn btn-danger" asp-action="Edit" asp-route-id="@item.MachApplyAndReturnInfo.ApplyAndReturnId">续租</a> |
+                <a class="btn btn-danger" asp-action="Edit" asp-route-id="@item.MachApplyAndReturnInfo.ApplyAndReturnId">归还</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

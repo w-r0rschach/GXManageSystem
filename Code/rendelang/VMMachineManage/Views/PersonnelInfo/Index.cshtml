@@ -1,0 +1,161 @@
+﻿@model IEnumerable<VMMachineManage.Models.PersonnelInfoModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.PassWord)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonnelNo)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.PersonnelName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepId)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Avatar)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.PersonnelSex)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentityCard)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.IsWork)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Nation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaritalStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LiveAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeChatAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mailbox)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Degree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.OnBoarDingTime)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.DepartureTime)
+            </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.TrialTime)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.IsStruggle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSecrecy)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.PassWord)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonnelNo)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonnelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepId)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Avatar)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonnelSex)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentityCard)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.IsWork)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Nation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaritalStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LiveAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeChatAccount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mailbox)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Degree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OnBoarDingTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartureTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrialTime)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.IsStruggle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSecrecy)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PersonnelId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PersonnelId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PersonnelId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

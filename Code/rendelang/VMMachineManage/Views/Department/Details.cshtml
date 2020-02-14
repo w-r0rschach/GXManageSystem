@@ -1,0 +1,30 @@
+﻿@model VMMachineManage.Models.Common_DepartmentModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>查看</h1>
+
+<div>
+    <h4>部门列表</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ParentNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ParentNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DepName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DepName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepId">编辑</a> |
+    <a asp-action="Index">返回列表</a>
+</div>

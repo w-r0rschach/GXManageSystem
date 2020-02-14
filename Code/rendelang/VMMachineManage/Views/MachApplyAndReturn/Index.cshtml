@@ -1,0 +1,73 @@
+﻿@model VMMachineManage.Models.MachineInfoViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>可申请虚拟机</h1>
+
+<form asp-controller="MyMachine" asp-action="Index">
+    <p>
+        <input type="text" name="searchString" />
+        <input type="submit" value="搜索" class="btn btn-primary" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineSystem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineDiskCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineMemory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineState)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MachineInfo)
+        {
+            <tr>
+                <td>
+                    @if (item.MachineSystem == 0)
+                    {
+                        <span>Windows</span>
+                    }
+                    @if (item.MachineSystem == 1)
+                    {
+                        <span>Linux</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineDiskCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineMemory)
+                </td>
+                <td>
+                    @if (item.MachineState == 0)
+                    {
+                        <span>空闲</span>
+                    }
+                    @if (item.MachineState == 1)
+                    {
+                        <span>申请</span>
+                    }
+                    @if (item.MachineState == 2)
+                    {
+                        <span>使用</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Create" asp-route-id="@item.MachineID">申请</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

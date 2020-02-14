@@ -63,7 +63,7 @@ namespace VMMachineManage
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=MachineInfo}/{action=Index}/{id?}");
             });
         }
     }
