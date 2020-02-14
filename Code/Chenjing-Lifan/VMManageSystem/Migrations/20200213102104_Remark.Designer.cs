@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VMManageSystem.Data;
 
 namespace VMManageSystem.Migrations
 {
     [DbContext(typeof(VirtualMachineContext))]
-    partial class VirtualMachineContextModelSnapshot : ModelSnapshot
+    [Migration("20200213102104_Remark")]
+    partial class Remark
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

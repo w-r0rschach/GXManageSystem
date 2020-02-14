@@ -1,0 +1,83 @@
+﻿@model VMManageSystem.Models.ApprovalViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a asp-action="Index">管理虚拟机</a>
+    <a asp-action="Create">添加虚拟机</a>
+    <a asp-action="Apply">申请虚拟机</a>
+    <label>待处理任务</label>
+</p>
+<form asp-controller="VirtualMachines" asp-action="Index" method="get">
+    <p>
+        搜索：<input type="text" name="SearchString" />
+        <input type="submit" value="开始搜索" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.OprationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ApplyUserID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ExamineUserID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ExamineResult)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ApplyTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ResultTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.Remark)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Approvals)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OprationType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplyUserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExamineUserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExamineResult)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplyTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.ResultTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Remark)
+                </td>
+                @{
+                    if (item.ExamineResult != VMManageSystem.Data.ApprovalResultEnum.Pass)
+                    {
+                        <td>
+                            <a asp-action="Agree" asp-route-id="@item.ApplyAndReturnId">通过</a> |
+                            <a asp-action="Disagree" asp-route-id="@item.ApplyAndReturnId">拒绝</a>
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

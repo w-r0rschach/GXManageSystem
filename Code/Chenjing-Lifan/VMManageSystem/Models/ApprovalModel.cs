@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using VMManageSystem.Data;
 
 namespace VMManageSystem.Models
 {
@@ -30,27 +31,26 @@ namespace VMManageSystem.Models
         /// 申请人员Id（员工Id） 外键
         /// </summary>
         [Display(Name = "申请人员")]
-        public int ApplyUserID { get; set; }
+        public int ApplyUserID { get; set; } = 1;
 
         /// <summary>
         /// 审批人员Id（员工Id） 外键
         /// </summary>
         [Display(Name = "审批人员")]
-        public int ExamineUserID { get; set; }
+        public int ExamineUserID { get; set; } = 1;
 
         /// <summary>
         /// 虚拟机Id 外键
         /// </summary>
         [ForeignKey("MachineId")]
         [Display(Name = "虚拟机Id")]
-        public int MachineInfoID { get; set; }
+        public int MachineInfoID { get; set; } = 1;
 
         /// <summary>
         /// 申请结果 0：同意，1：拒绝
         /// </summary>
-        [Range(0, 2)]
         [Display(Name = "申请结果")]
-        public byte ExamineResult { get; set; }
+        public ApprovalResultEnum ExamineResult { get; set; }
 
         /// <summary>
         /// 申请时间（格式：yyyy-mm-dd HH:MM:SS）
@@ -65,6 +65,13 @@ namespace VMManageSystem.Models
         [Display(Name = "归还时间")]
         [DataType(DataType.DateTime)]
         public DateTime ResultTime { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [Display(Name = "备注")]
+        [StringLength(127)]
+        public string Remark { get; set; }
 
         /// <summary>
         /// 员工

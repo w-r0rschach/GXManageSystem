@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VMManageSystem.Data;
 
 namespace VMManageSystem.Migrations
 {
     [DbContext(typeof(VirtualMachineContext))]
-    partial class VirtualMachineContextModelSnapshot : ModelSnapshot
+    [Migration("20200212031314_VirtualMachineModel")]
+    partial class VirtualMachineModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,10 +48,6 @@ namespace VMManageSystem.Migrations
 
                     b.Property<int?>("PersonnelId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(127)")
-                        .HasMaxLength(127);
 
                     b.Property<DateTime>("ResultTime")
                         .HasColumnType("datetime2");

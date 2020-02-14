@@ -14,17 +14,17 @@ namespace VMManageSystem.Data
         /// <summary>
         /// 未使用
         /// </summary>
-        [Display(Name = "未使用")]
+        [Display(Name = "空")]
         None = 0,
         /// <summary>
         /// 正在申请
         /// </summary>
-        [Display(Name = "正在申请")]
+        [Display(Name = "正在被申请")]
         Applying = 1,
         /// <summary>
         /// 正在被使用
         /// </summary>
-        [Display(Name = "正在被使用")]
+        [Display(Name = "使用中")]
         BeingUsed = 2
     }
 }
