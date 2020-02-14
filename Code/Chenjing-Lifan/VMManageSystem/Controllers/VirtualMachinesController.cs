@@ -101,6 +101,7 @@ namespace VMManageSystem.Controllers
             {
                 approvals.ToArray()[0].ExamineResult = ApprovalResultEnum.Pass;
                 approvals.ToArray()[0].MachineInfoID = exIds.ToArray()[0];
+                _context.MachineInfo.ToList().Find(o => o.MachineId == exIds.ToArray()[0]).MachineState = MachineStatueEnum.BeingUsed;
                 _context.SaveChanges();
             }
             return RedirectToAction(nameof(ApprovalDetails));
