@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using VMManageSystem.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace VMManageSystem
 {
@@ -28,6 +30,11 @@ namespace VMManageSystem
         {
             services.AddControllersWithViews();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
+                AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+                {
+                    o.LoginPath = new PathString("/Home/Login");
+                });
             services.AddDbContext<VirtualMachineContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("VirtualMachineContext")));
         }

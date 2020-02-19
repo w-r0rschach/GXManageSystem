@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using VMManageSystem.Data;
 
 namespace VMManageSystem.Models
 {
@@ -22,14 +24,20 @@ namespace VMManageSystem.Models
         /// </summary>
         public List<PersonnelModel> Personnels { get; set; }
 
+        /// <summary>
+        /// 虚拟机信息列表
+        /// </summary>
+        public List<VirtualMachineModel> VirtualMachines { get; set; }
+
         private int _usedDays;
         /// <summary>
-        /// 使用天数
+        /// 申请天数
         /// </summary>
-        public int UsedDays 
+        [Display(Name = "申请天数")]
+        public int UsedDays
         {
             get { return _usedDays; }
-            set 
+            set
             {
                 if (Approval == null)
                 {
@@ -40,10 +48,18 @@ namespace VMManageSystem.Models
             }
         }
         /// <summary>
-        /// 使用数量
+        /// 申请数量
         /// </summary>
+        [Range(1, 100)]
+        [Display(Name = "申请数量")]
         public int UsedCount { get; set; }
 
+        /// <summary>
+        /// 操作系统
+        /// </summary>
+        [EnumDataType(typeof(OperatingSystemEnum))]
+        [Display(Name = "操作系统")]
+        public OperatingSystemEnum OperatingSystem { get; set; }
 
     }
 }

@@ -71,7 +71,11 @@ namespace VMManageSystem.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AppMaxCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
@@ -104,6 +108,7 @@ namespace VMManageSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mailbox")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("MaritalStatus")
@@ -114,6 +119,10 @@ namespace VMManageSystem.Migrations
 
                     b.Property<DateTime>("OnboardingTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonnelName")
                         .HasColumnType("nvarchar(max)");
@@ -130,7 +139,12 @@ namespace VMManageSystem.Migrations
                     b.Property<DateTime>("TrialTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("WeChatAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonnelId");

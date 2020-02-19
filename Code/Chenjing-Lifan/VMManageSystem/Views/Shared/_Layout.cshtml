@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,7 +30,17 @@
                 <div>
                     <ul class="navbar-nav flex-grow-1">
                         <li>
-                            <a asp-area="" asp-controller="Home" asp-action="Login">登录</a>
+                            @{
+                                string name = User.FindFirstValue(ClaimTypes.Name);
+                                if (!string.IsNullOrWhiteSpace(name))
+                                {
+                                    <a asp-area="">@name</a>
+                                }
+                                else
+                                {
+                                    <a asp-area="" asp-controller="Home" asp-action="Login">登录</a>
+                                }
+                            }
                         </li>
                     </ul>
                 </div>

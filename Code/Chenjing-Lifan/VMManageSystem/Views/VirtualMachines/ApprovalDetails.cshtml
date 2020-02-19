@@ -19,9 +19,12 @@
 <table class="table">
     <thead>
         <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Approval.OprationType)
-                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => Model.VirtualMachines[0].MachineIP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.VirtualMachines[0].MachineSystem)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Approval.ApplyUserID)
             </th>
@@ -47,12 +50,19 @@
         @foreach (var item in Model.Approvals)
         {
             <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.OprationType)
-                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => Model.VirtualMachines.Find(o =>
+                        o.MachineId == item.MachineInfoID &&
+                        item.ExamineResult == VMManageSystem.Data.ApprovalResultEnum.Pass).MachineIP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.VirtualMachines.Find(o => o.MachineId == item.MachineInfoID).MachineSystem)
+                </td>
+                @*当前用户为管理员角色时展示申请人员姓名，普通用户则不展示*@
                 <td>
                     @Html.DisplayFor(modelItem => Model.Personnels.Find(o => o.PersonnelId == item.ApplyUserID).PersonnelName)
                 </td>
+                @*当前用户为管理员角色时不展示审批人员姓名，普通用户则展示*@
                 <td>
                     @Html.DisplayFor(modelItem => Model.Personnels.Find(o => o.PersonnelId == item.ExamineUserID).PersonnelName)
                 </td>

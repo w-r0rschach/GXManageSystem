@@ -1,5 +1,5 @@
 ﻿@model VMManageSystem.Models.VirtualMachineViewModel
-
+@using System.Security.Claims
 @{
     ViewData["Title"] = "Index";
 }
@@ -100,10 +100,11 @@
                     }
                 </td>
                 <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.MachineId">编辑</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.MachineId">续期</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MachineId">回收</a>|
-                    <a asp-action="Delete" asp-route-id="@item.MachineId">删除</a>
+                    <a asp-action="Edit" asp-route-id="@item.MachineId" asp-access-key="1">编辑</a> |
+                    <a asp-action="Details" asp-route-id="@item.MachineId" asp-access-key="1">详情</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MachineId" asp-access-key="1">删除</a>
+                    <a asp-action="Details" asp-route-id="@item.MachineId" asp-access-key="2">续期</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MachineId" asp-access-key="2">回收</a>
                 </td>
             </tr>
         }
