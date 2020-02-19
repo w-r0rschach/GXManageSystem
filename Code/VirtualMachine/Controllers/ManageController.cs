@@ -100,7 +100,7 @@ namespace VirtualMachine.Controllers
         /// 审批虚拟机
         /// </summary>
         /// <returns></returns>
-        public IActionResult Approve()
+        public async Task<IActionResult> Approve(int? pageIndex = 1)
         {
             var list = from m1 in _db.MachineInfo
                        join m2 in _db.MachApplyAndReturn on m1.MachineId equals m2.MachineInfoID
@@ -113,7 +113,9 @@ namespace VirtualMachine.Controllers
                            CommonPersonnelInfo = p3
                        };
 
-            return View(list);
+            var PagingList = await PaginatedList<ReturnMachineInfoApplyData>.CreateAsync(list.AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            return View(PagingList);
         }
 
         /// <summary>

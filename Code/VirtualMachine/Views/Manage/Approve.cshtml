@@ -1,6 +1,10 @@
-@model IEnumerable<VirtualMachine.Return.ReturnMachineInfoApplyData>
+@using VirtualMachine.Return;
+@model PaginatedList<ReturnMachineInfoApplyData>
 @{
     ViewData["Title"] = "审批虚拟机";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -42,5 +46,21 @@
             <a href="SubmitApprove?mid=@item.MachineInfo.MachineId&aid=@item.MachApplyAndReturn.ApplyAndReturnId&state=2" class="btn btn-primary btn-sm">同意</a>
             <a href="SubmitApprove?mid=@item.MachineInfo.MachineId&aid=@item.MachApplyAndReturn.ApplyAndReturnId&state=1" class="btn btn-danger btn-sm">拒绝</a>
         </div>
+    </div>
+}
+
+@if (Model.TotalPages != 0)
+{
+    <div class="row justify-content-center mt-4">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link btn @prevDisabled" asp-action="Approve" asp-route-pageIndex="@(Model.PageIndex - 1)">上一页</a></li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.PageIndex == i ? "active":"")"><a class="page-link" asp-action="Approve" asp-route-pageIndex="@i">@i</a></li>
+            }
+
+            <li class="page-item"><a class="page-link btn @nextDisabled" asp-action="Approve" asp-route-pageIndex="@(Model.PageIndex + 1)">下一页</a></li>
+        </ul>
     </div>
 }
