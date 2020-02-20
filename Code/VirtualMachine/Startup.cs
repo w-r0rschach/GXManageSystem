@@ -32,7 +32,8 @@ namespace VirtualMachine
             services.AddControllersWithViews();
 
             // 注册数据库上下文
-            services.AddDbContext<VirtualMachineDB>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            //services.AddDbContext<VirtualMachineDB>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServerDefault")));
+            services.AddDbContext<VirtualMachineDB>(options => options.UseMySql(Configuration.GetConnectionString("MySqlDefault")));
             services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs));
             // 添加Session
             services.AddSession();

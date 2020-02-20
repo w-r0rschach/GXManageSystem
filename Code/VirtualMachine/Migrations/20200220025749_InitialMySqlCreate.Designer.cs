@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VirtualMachine.Data;
@@ -10,23 +9,21 @@ using VirtualMachine.Data;
 namespace VirtualMachine.Migrations
 {
     [DbContext(typeof(VirtualMachineDB))]
-    [Migration("20200218075253_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200220025749_InitialMySqlCreate")]
+    partial class InitialMySqlCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("VirtualMachine.Models.CommonAuthority", b =>
                 {
                     b.Property<int>("AuthorityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("AuthorityName")
                         .HasColumnType("int")
@@ -41,14 +38,13 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("CorrelationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("PersonnelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
                     b.Property<int>("RoleId")
@@ -63,12 +59,11 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("DepId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("DepName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
 
                     b.Property<int>("ParentNumber")
@@ -83,22 +78,21 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("PersonnelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
                     b.Property<int>("AppMaxCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Degree")
                         .HasColumnType("int");
@@ -107,10 +101,10 @@ namespace VirtualMachine.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DepartureTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("IdentityCard")
-                        .HasColumnType("nvarchar(18)")
+                        .HasColumnType("varchar(18) CHARACTER SET utf8mb4")
                         .HasMaxLength(18);
 
                     b.Property<int>("IsSecrecy")
@@ -123,29 +117,29 @@ namespace VirtualMachine.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LiveAddress")
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
                     b.Property<string>("Mailbox")
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("varchar(500) CHARACTER SET utf8mb4")
                         .HasMaxLength(500);
 
                     b.Property<int>("MaritalStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("Nation")
-                        .HasColumnType("nvarchar(6)")
+                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4")
                         .HasMaxLength(6);
 
                     b.Property<DateTime>("OnboardingTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasMaxLength(255);
 
                     b.Property<string>("PersonnelName")
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<int>("PersonnelNo")
@@ -155,18 +149,18 @@ namespace VirtualMachine.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("varchar(500) CHARACTER SET utf8mb4")
                         .HasMaxLength(500);
 
                     b.Property<DateTime>("TrialTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasMaxLength(255);
 
                     b.Property<string>("WeChatAccount")
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
                     b.HasKey("PersonnelId");
@@ -178,12 +172,11 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
 
                     b.HasKey("RoleId");
@@ -195,8 +188,7 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("RoleAuthorityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("AuthorityId")
                         .HasColumnType("int");
@@ -213,11 +205,10 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("ApplyAndReturnId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ApplyTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("ApplyUserID")
                         .HasColumnType("int");
@@ -235,11 +226,11 @@ namespace VirtualMachine.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("ResultTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("ApplyAndReturnId");
 
@@ -250,21 +241,20 @@ namespace VirtualMachine.Migrations
                 {
                     b.Property<int>("MachineId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<double>("MachineDiskCount")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<string>("MachineIP")
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
 
                     b.Property<double>("MachineMemory")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<string>("MachinePassword")
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
 
                     b.Property<int>("MachineState")
@@ -274,7 +264,7 @@ namespace VirtualMachine.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MachineUser")
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
 
                     b.HasKey("MachineId");

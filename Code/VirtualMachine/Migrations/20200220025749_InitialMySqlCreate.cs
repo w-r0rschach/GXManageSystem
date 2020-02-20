@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VirtualMachine.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMySqlCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +13,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     AuthorityId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AuthorityName = table.Column<int>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +26,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     CorrelationId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     PersonnelId = table.Column<int>(nullable: false),
                     RoleId = table.Column<int>(nullable: false),
                     Remark = table.Column<string>(maxLength: 200, nullable: true)
@@ -40,7 +41,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     DepId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ParentNumber = table.Column<int>(nullable: false),
                     DepName = table.Column<string>(maxLength: 20, nullable: false)
                 },
@@ -54,7 +55,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     PersonnelId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     PersonnelNo = table.Column<int>(nullable: false),
                     PersonnelName = table.Column<string>(maxLength: 50, nullable: true),
                     DepId = table.Column<int>(nullable: false),
@@ -90,7 +91,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     RoleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleName = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -103,7 +104,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     RoleAuthorityId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<int>(nullable: false),
                     AuthorityId = table.Column<int>(nullable: false)
                 },
@@ -117,7 +118,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     ApplyAndReturnId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OprationType = table.Column<int>(nullable: false),
                     ApplyUserID = table.Column<int>(nullable: false),
                     ExamineUserID = table.Column<int>(nullable: false),
@@ -137,7 +138,7 @@ namespace VirtualMachine.Migrations
                 columns: table => new
                 {
                     MachineId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     MachineIP = table.Column<string>(maxLength: 20, nullable: true),
                     MachineSystem = table.Column<int>(nullable: false),
                     MachineDiskCount = table.Column<double>(nullable: false),
