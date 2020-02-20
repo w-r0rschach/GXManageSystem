@@ -5,245 +5,162 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using VMMachineManage.Data; 
+using Newtonsoft.Json;
+using VMMachineManage.Data;
 using VMMachineManage.Models;
 
 namespace VMMachineManage.Controllers
 {
-    public class MachApplyAndReturnController : Controller
+    public class MachApplyAndReturnController : RightsController
     {
         private readonly VMMachineManageContext _context;
 
+       
+
         public MachApplyAndReturnController(VMMachineManageContext context)
         {
+            Role = 2;
             _context = context;
         }
 
         // GET: MachApplyAndReturn
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Index(string searchString)
+        public IActionResult Index(string searchString)
         {
-            var machines = from m in _context.MachineInfo select m;
-         
+            var machines = from m in _context.MachineInfo
+                           where m.MachineState == 0    // 空闲状态
+                           orderby m.MachineSystem ascending, m.MachineDiskCount ascending, m.MachineMemory ascending
+                           group m by new { m.MachineSystem, m.MachineDiskCount, m.MachineMemory } into b
+                           select new MachineInfoModel
+                           {
+                               MachineSystem = b.Key.MachineSystem,
+                               MachineDiskCount = b.Key.MachineDiskCount,
+                               MachineMemory = b.Key.MachineMemory,
+                               MachineState = b.Count() // 临时当做剩余数量显示
+
+                           };
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 machines = machines.Where(option => option.MachineState == 0 && (option.MachineIP.Contains(searchString) ||
                   option.MachineUser.Contains(searchString)));
             }
+
            
-            MachineInfoViewModel viewMode = new MachineInfoViewModel()
-            { 
-                MachineInfo = await machines.ToListAsync()
-            };
-            return View(viewMode);
+           
+            return View(machines.ToList());
         }
 
 
-        // GET: MachApplyAndReturn/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var machApplyAndReturnModel = await _context.MachApplyAndReturn
-                .FirstOrDefaultAsync(m => m.ApplyAndReturnId == id);
-            if (machApplyAndReturnModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(machApplyAndReturnModel);
-        }
 
         // GET: MachApplyAndReturn/Create
-        public IActionResult Create(int id)
+        // <summary>
+        /// GET
+        /// Vmware/Apply
+        /// 确认申请
+        /// </summary>/
+        /// <param name="MachineSystem">操作系统 0：Windows 1：Linux</param>
+        /// <param name="MachineDiskCount">硬盘大小/G</param>
+        /// <param name="MachineMemory">内存大小/G</param>
+        /// <param name="FreeNumber">空闲数量</param>
+        /// <returns>IActionResult</returns>
+        public IActionResult Create(int machineSystem, double machineDiskCount, double machineMemory, int freeNumber)
         {
-
-            var machines = from m in _context.MachineInfo select m;
-
-            machines = machines.Where(option => option.MachineID == id);
-
-            MachineInfoModel machineinfo = machines.FirstOrDefault();
-            MachApplyAndReturnModel viewMode = new MachApplyAndReturnModel()
+            if (machineSystem >= 2 || machineDiskCount == 0 || machineMemory == 0 || freeNumber == 0)
             {
-                MachineSystem = machineinfo.MachineSystem,
-                MachineMemory = machineinfo.MachineMemory,
-                MachineDiskCount = machineinfo.MachineDiskCount,
-                MachineID = machineinfo.MachineID
-
-            };
-            return View(viewMode);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["MachineSystem"] = machineSystem;
+            ApplyDataModel applyData = new ApplyDataModel();
+            applyData.MachineDiskCount = machineDiskCount;
+            applyData.MachineMemory = machineMemory;
+            applyData.MachineSystem = machineSystem;
+            applyData.Number = freeNumber;
+            return View(applyData);
         }
 
         // POST: MachApplyAndReturn/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 提交申请
+        /// </summary>
+        /// <param name="ApplyDataModel">返回申请信息</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Number,DaysNumber,ExamineUserName,ApplyAndReturnId,OprationType,ApplyUserID,ExamineUserID,MachineInfoID,ExamineResult,ApplyTime,ResultTime,Remark")] MachApplyAndReturnModel machApplyAndReturnModel)
+        public async Task<IActionResult> Create(ApplyDataModel ApplyDataModel)
         {
-            if (string.IsNullOrWhiteSpace(User.FindFirstValue(ClaimTypes.Sid)))
+            PersonnelInfoModel userInfo = JsonConvert.DeserializeObject<PersonnelInfoModel>(HttpContext.Session.GetString("User"));
+            if (userInfo.PersonnelId<1)
             {
-                NotFound();
+                return RedirectToAction("Index", "Home");
             }
             else
                 if (ModelState.IsValid)
             {
+                MachApplyAndReturnModel machApplyAndReturnModel = new MachApplyAndReturnModel();
 
-                //获取审批人Id
-                machApplyAndReturnModel.ExamineUserID = Convert.ToInt32(machApplyAndReturnModel.ExamineUserName);
-                machApplyAndReturnModel.ApplyUserID = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Sid));//获取当前申请人Id
-                                                                                                           //归还时间=申请时间+归还天数
-                machApplyAndReturnModel.ResultTime = machApplyAndReturnModel.ApplyTime.AddDays(machApplyAndReturnModel.DaysNumber);
-                if (machApplyAndReturnModel.Number <= 3)
+                // 最大数量
+                int appMaxCount = 3;
+
+                IEnumerable<MachineInfoModel> list = from m in _context.MachineInfo
+                                                     where m.MachineState == 0
+                                                        && m.MachineSystem == ApplyDataModel.MachineSystem
+                                                        && m.MachineDiskCount == ApplyDataModel.MachineDiskCount
+                                                        && m.MachineMemory == ApplyDataModel.MachineMemory
+                                                     select m;
+
+                // 空闲数量小于申请数量 申请失败
+                if (list.Count() < ApplyDataModel.Number)
                 {
-                    machApplyAndReturnModel.ExamineResult = 0;
+                    return View("Views/MachApplyAndReturn/Error.cshtml");
                 }
-                for (int i = 0; i < machApplyAndReturnModel.Number; i++)
+                //1、查询当前用户申请的所有虚拟机数量
+                //2、最新申请数量=已申请数量+本次申请数量>默认申请数量，使用审批流程
+                var UserInfo = from m in _context.Common_PersonnelInfo.Where(m => m.PersonnelId == userInfo.PersonnelId) select m;
+                PersonnelInfoModel personnelInfo = UserInfo.FirstOrDefault();
+                personnelInfo.AppMaxCount = personnelInfo.AppMaxCount + ApplyDataModel.Number;
+
+                // 未超过数量系统自动审批
+                // 超过数量由管理员审批
+                // 修改虚拟机状态：申请中
+                for (int i = 0; i < ApplyDataModel.Number; i++)
                 {
-                    _context.Add(machApplyAndReturnModel);
+                    var model = list.ElementAt(i);
+
+                    MachApplyAndReturnModel machApplyAndReturn = new MachApplyAndReturnModel();
+                    machApplyAndReturn.OprationType = 0;
+                    machApplyAndReturn.ApplyUserID = userInfo.PersonnelId;
+                    machApplyAndReturn.ExamineUserID = Convert.ToInt32(ApplyDataModel.ExamineUserName);
+                    machApplyAndReturn.MachineInfoID = model.MachineID;
+                    machApplyAndReturn.ExamineResult = (personnelInfo.AppMaxCount <= appMaxCount ? 2 : 0);
+                    machApplyAndReturn.ApplyTime = ApplyDataModel.ApplyTime;
+                    machApplyAndReturn.ResultTime = ApplyDataModel.ApplyTime.AddDays(ApplyDataModel.DaysNumber); //归还时间=申请时间+默认天数
+                    machApplyAndReturn.Remark = ApplyDataModel.Remark;
+                    // 添加到申请记录表
+                    _context.MachApplyAndReturn.Add(machApplyAndReturn);
+                    if (machApplyAndReturn.ExamineResult == 2)
+                    {
+                        model.MachineState = 2;
+                    }
+                    if (machApplyAndReturn.ExamineResult == 0)
+                    {
+                        model.MachineState = 1;
+                    }
+                        _context.MachineInfo.Update(model);
+                   
                 }
+
+
+                _context.Common_PersonnelInfo.Update(personnelInfo);
                 await _context.SaveChangesAsync();
-
-                //修改虚拟机状态
-                var machines = from m in _context.MachineInfo select m;
-                machines = machines.Where(option => option.MachineID == machApplyAndReturnModel.MachineID);
-                MachineInfoModel machineInfo = new MachineInfoModel()
-                {
-                    MachineState = 1
-                };
-                try
-                {
-                    _context.Update(machineInfo);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MachApplyAndReturnModelExists(machineInfo.MachineID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                //修改用户数量
-                var personInfo = from m in _context.Common_PersonnelInfo select m;
-                personInfo = personInfo.Where(option => option.PersonnelId == machApplyAndReturnModel.ApplyUserID);
-                PersonnelInfoModel personnelInfoModel = new PersonnelInfoModel()
-                {
-                    AppMaxCount = machApplyAndReturnModel.Number
-                };
-                try
-                {
-                    _context.Update(personnelInfoModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MachApplyAndReturnModelExists(personnelInfoModel.PersonnelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-
-
-                return RedirectToAction(nameof(Index));
             }
 
 
-            return View(machApplyAndReturnModel);
-        }
-
-        // GET: MachApplyAndReturn/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var machApplyAndReturnModel = await _context.MachApplyAndReturn.FindAsync(id);
-            if (machApplyAndReturnModel == null)
-            {
-                return NotFound();
-            }
-            return View(machApplyAndReturnModel);
-        }
-
-        // POST: MachApplyAndReturn/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApplyAndReturnId,OprationType,ApplyUserID,ExamineUserID,MachineInfoID,ExamineResult,ApplyTime,ResultTime,Remark")] MachApplyAndReturnModel machApplyAndReturnModel)
-        {
-            if (id != machApplyAndReturnModel.ApplyAndReturnId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(machApplyAndReturnModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MachApplyAndReturnModelExists(machApplyAndReturnModel.ApplyAndReturnId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(machApplyAndReturnModel);
-        }
-
-        // GET: MachApplyAndReturn/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var machApplyAndReturnModel = await _context.MachApplyAndReturn
-                .FirstOrDefaultAsync(m => m.ApplyAndReturnId == id);
-            if (machApplyAndReturnModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(machApplyAndReturnModel);
-        }
-
-        // POST: MachApplyAndReturn/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var machApplyAndReturnModel = await _context.MachApplyAndReturn.FindAsync(id);
-            _context.MachApplyAndReturn.Remove(machApplyAndReturnModel);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "MyMachine");
         }
 
         private bool MachApplyAndReturnModelExists(int id)

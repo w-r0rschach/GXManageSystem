@@ -7,22 +7,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.International.Converters.PinYinConverter;
 using VMMachineManage.Data;
 using VMMachineManage.Models;
 
 namespace VMMachineManage.Controllers
 {
-    public class PersonnelInfoController : Controller
+    public class PersonnelInfoController : RightsController
     {
         private readonly VMMachineManageContext _context;
 
         public PersonnelInfoController(VMMachineManageContext context)
         {
+            Role = 1;
             _context = context;
         }
 
         // GET: PersonnelInfo
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+       
         public async Task<IActionResult> Index()
         {
             var personnelInfo = from m in _context.Common_PersonnelInfo select m;
@@ -59,17 +61,50 @@ namespace VMMachineManage.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonnelId,PassWord,PersonnelNo,PersonnelName,DepId,Avatar,PersonnelSex,BirthDate,IdentityCard,IsWork,Nation,MaritalStatus,LiveAddress,Phone,WeChatAccount,Mailbox,Degree,Address,OnBoarDingTime,DepartureTime,TrialTime,IsStruggle,IsSecrecy")] PersonnelInfoModel PersonnelInfoModel)
+        public async Task<IActionResult> Create(string UserName,string PassWord)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(PersonnelInfoModel);
+                PersonnelInfoModel personnelInfoModel = new PersonnelInfoModel();
+                personnelInfoModel.UserName = UserName;
+                personnelInfoModel.PassWord = PassWord;
+                personnelInfoModel.DepId = 2;
+
+                _context.Add(personnelInfoModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(PersonnelInfoModel);
+            return RedirectToAction(nameof(Index));
         }
+        /// <summary>
+        /// 将汉字转换为拼音
+        /// </summary>
+        /// <param name="str">汉字</param>
+        /// <returns></returns>
+        private string PinYinConverter(string str)
+        {
+            string result = string.Empty;
+            foreach (char item in str)
+            {
+                try
+                {
+                    ChineseChar cc = new ChineseChar(item);
+                    if (cc.Pinyins.Count > 0 && cc.Pinyins[0].Length > 0)
+                    {
+                        string temp = cc.Pinyins[0].ToString();
+                        result += temp.Substring(0, temp.Length - 1);
+                    }
+                }
+                catch (Exception)
+                {
+                    result += item.ToString();
+                }
+            }
+            return result.ToLower();
+            // Console.WriteLine(result);//"WOAINIZHONGGUO!123"
 
+        }
         // GET: PersonnelInfo/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

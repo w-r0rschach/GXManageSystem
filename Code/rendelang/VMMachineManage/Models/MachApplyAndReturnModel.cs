@@ -31,7 +31,7 @@ namespace VMMachineManage.Models
         [NotMapped]
         public double MachineMemory { get; set; }
         /// <summary>
-        /// 虚拟机ID
+        /// 虚拟机ID 不用于数据库
         /// </summary>
         [NotMapped]
         public int MachineID { get; set; } 

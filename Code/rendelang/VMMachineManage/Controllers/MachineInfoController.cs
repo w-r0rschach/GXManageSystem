@@ -13,34 +13,34 @@ using VMMachineManage.Models;
 
 namespace VMMachineManage.Controllers
 {
-    public class MachineInfoController : Controller
+    public class MachineInfoController : RightsController
     {
         private readonly VMMachineManageContext _context;
 
         public MachineInfoController(VMMachineManageContext context)
         {
+            Role = 1;
             _context = context;
         }
 
         // GET: MachineInfo
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Index(string searchString)
+      
+        public async Task<IActionResult> Index(string searchString="")
         {
             string sid = User.FindFirstValue(ClaimTypes.Sid);//获取ID
-          
+
             var machines = from m in _context.MachineInfo select m;
+                         
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 machines = machines.Where(option => option.MachineIP.Contains(searchString) ||
                   option.MachineUser.Contains(searchString));
             }
-          
-            MachineInfoViewModel viewMode = new MachineInfoViewModel()
+            MachineInfoViewModel machineInfoViewModel = new MachineInfoViewModel()
             {
-                
-                MachineInfo = await machines.ToListAsync()
+                MachineInfo = machines.ToList()
             };
-            return View(viewMode);
+            return View(machineInfoViewModel);
         } 
 
         // GET: MachineInfo/Details/5
@@ -60,7 +60,34 @@ namespace VMMachineManage.Controllers
 
             return View(machineInfoModel);
         }
-
+        /// <summary>
+        /// 虚拟机回收
+        /// </summary>
+        /// <param name="id">回收的虚拟机Id</param>
+        /// <returns></returns>
+        public  IActionResult Recycling(int id)
+        {
+            //修改虚拟机状态
+            var machineInfo = from m in _context.MachineInfo where (m.MachineID == id) select m;
+            MachineInfoModel infoModel = machineInfo.FirstOrDefault();
+            infoModel.MachineState = 0;
+            _context.Update(infoModel);
+             
+            //修改虚拟机申请表单数量
+            var machineReturn = from m in _context.MachApplyAndReturn.Where(m=>m.MachineInfoID == id && m.OprationType == 0 &&
+                              m.ExamineResult == 2 ) select m;
+            MachApplyAndReturnModel machApplyAndReturn  = machineReturn.FirstOrDefault();
+            machApplyAndReturn.OprationType = 1;
+            machApplyAndReturn.ResultTime = DateTime.Now;
+            _context.Update(machApplyAndReturn);
+            //修改员工持有虚拟机数量
+            var UserInfo = from m in _context.Common_PersonnelInfo.Where(m => m.PersonnelId == Convert.ToInt32(machApplyAndReturn.ApplyUserID)) select m;
+            PersonnelInfoModel personnelInfo = UserInfo.FirstOrDefault();
+            personnelInfo.AppMaxCount = personnelInfo.AppMaxCount - 1;
+            _context.Update(personnelInfo);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "MachineInfo");
+        }
         // GET: MachineInfo/Create
         public IActionResult Create()
         {

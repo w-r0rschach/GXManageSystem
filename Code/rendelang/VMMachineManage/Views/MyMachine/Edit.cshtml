@@ -4,64 +4,75 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>MachApplyAndReturnModel</h4>
+<h1>虚拟机归还</h1>
+ 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ApplyAndReturnId" />
+            <input type="hidden" asp-for="MachineID" />
+            <div class="form-group">
+                <label class="control-label">操作系统</label>
+                <select disabled="disabled" asp-for="MachineSystem" class="form-control">
+                    <option value="0">Windows</option>
+                    <option value="1">Linux</option>
+                </select>
+                <span asp-validation-for="MachineSystem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">硬盘大小</label>
+                <input readonly="readonly" asp-for="MachineDiskCount" class="form-control" />
+                <span asp-validation-for="MachineDiskCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">内存大小</label>
+                <input readonly="readonly" asp-for="MachineMemory" class="form-control" />
+                <span asp-validation-for="MachineMemory" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="OprationType" class="control-label"></label>
-                <select asp-for="OprationType" class="form-control"></select>
+                <select name="OprationType" disabled="disabled" asp-for="OprationType" class="form-control">
+                    <option value="1">归还</option>
+                </select>
                 <span asp-validation-for="OprationType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ApplyUserID" class="control-label"></label>
-                <input asp-for="ApplyUserID" class="form-control" />
-                <span asp-validation-for="ApplyUserID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExamineUserID" class="control-label"></label>
-                <input asp-for="ExamineUserID" class="form-control" />
-                <span asp-validation-for="ExamineUserID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineInfoID" class="control-label"></label>
-                <input asp-for="MachineInfoID" class="form-control" />
-                <span asp-validation-for="MachineInfoID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExamineResult" class="control-label"></label>
-                <input asp-for="ExamineResult" class="form-control" />
-                <span asp-validation-for="ExamineResult" class="text-danger"></span>
+                <label asp-for="ExamineUserName" class="control-label"></label>
+                <select name="ExamineUserName" asp-for="ExamineUserName" class="form-control">
+                    <option value="1">任德浪</option>
+                </select>
+                <span asp-validation-for="ExamineUserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ApplyTime" class="control-label"></label>
-                <input asp-for="ApplyTime" class="form-control" />
+                <input readonly="readonly" asp-for="ApplyTime" class="form-control" />
                 <span asp-validation-for="ApplyTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ResultTime" class="control-label"></label>
-                <input asp-for="ResultTime" class="form-control" />
+                <label  class="control-label">归还时间</label>
+                <input name="ResultTime" readonly="readonly" asp-for="ResultTime"  class="form-control" />
                 <span asp-validation-for="ResultTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Remark" class="control-label"></label>
-                <input asp-for="Remark" class="form-control" />
-                <span asp-validation-for="Remark" class="text-danger"></span>
+                <label asp-for="Number" class="control-label"></label>
+                <input readonly="readonly" asp-for="Number" value="1" class="form-control" />
+                <span asp-validation-for="Number" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <p><label class="control-label">归还原因</label></p>
+                <textarea name="Remark" asp-for="Remark" class="form-control" value=" 文本域默认值"> </textarea>
+                @*<span asp-validation-for="Remark" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="归还" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回列表</a>
 </div>
 
 @section Scripts {

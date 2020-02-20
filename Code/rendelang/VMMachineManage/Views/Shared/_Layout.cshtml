@@ -6,34 +6,65 @@
     <title>@ViewData["Title"] - VMMachineManage</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">虚拟机管理</a>
+                <a class="navbar-brand" href="#">虚拟机管理系统</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="nav navbar-nav flex-grow-1">
+                        @if (ViewBag.User != null)
+                        {
+                            @if (ViewBag.User.DepId == 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="MachineInfo" asp-action="Index">管理虚拟机</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AuitMachine" asp-action="Index">审批虚拟机</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="PersonnelInfo" asp-action="Index">员工管理</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="MachApplyAndReturn" asp-action="Index">申请虚拟机</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="MyMachine" asp-action="Index">我的虚拟机</a>
+                                </li>  
+                            }
+                        }
+                    </ul>
+                </div>
+
+                <div class="collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MachApplyAndReturn" asp-action="Index">虚拟机申请</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MyMachine" asp-action="Index">我的虚拟机</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">虚拟机审批</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PersonnelInfo" asp-action="Index">员工信息</a>
-                        </li>
-                        <li class="nav-item" style="margin-left:30%">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PersonnelInfo" asp-action="Index">用户名：@User.Identity.Name</a>
-                        </li>
+                        @if (ViewBag.User == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">登录</a>
+                            </li>
+                        }
+                        else
+                        {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="PersonnelInfo" asp-action="Details" asp-route-id="@ViewBag.User.PersonnelId"> @ViewBag.User.UserName</a> 
+                    </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">退出</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

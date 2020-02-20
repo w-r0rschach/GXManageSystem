@@ -1,4 +1,4 @@
-﻿@model VMMachineManage.Models.MachineInfoViewModel
+﻿@model IEnumerable< VMMachineManage.Models.MachineInfoModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,7 +6,7 @@
 
 <h1>可申请虚拟机</h1>
 
-<form asp-controller="MyMachine" asp-action="Index">
+<form asp-controller="MachApplyAndReturn" asp-action="Index">
     <p>
         <input type="text" name="searchString" />
         <input type="submit" value="搜索" class="btn btn-primary" />
@@ -16,22 +16,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineSystem)
+                @Html.DisplayNameFor(model => model.MachineSystem)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineDiskCount)
+                @Html.DisplayNameFor(model => model.MachineDiskCount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineMemory)
+                @Html.DisplayNameFor(model => model.MachineMemory)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineState)
+                <span >空闲数量</span>
             </th>
-            <th></th>
+            <th>
+                <span >操作</span>
+            </th>
+            
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.MachineInfo)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
@@ -51,21 +54,10 @@
                     @Html.DisplayFor(modelItem => item.MachineMemory)
                 </td>
                 <td>
-                    @if (item.MachineState == 0)
-                    {
-                        <span>空闲</span>
-                    }
-                    @if (item.MachineState == 1)
-                    {
-                        <span>申请</span>
-                    }
-                    @if (item.MachineState == 2)
-                    {
-                        <span>使用</span>
-                    }
+                   @Html.DisplayFor(modelItem=>item.MachineState)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-action="Create" asp-route-id="@item.MachineID">申请</a>
+                    <a class="btn btn-primary" href="MachApplyAndReturn/Create?machineSystem=@item.MachineSystem&machineDiskCount=@item.MachineDiskCount&machineMemory=@item.MachineMemory&freeNumber=@item.MachineState">申请</a>
                 </td>
             </tr>
         }

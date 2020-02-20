@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 using VMMachineManage.Data;
-using VMMachineManage.Models;
 
 namespace VMMachineManage.Controllers
 {
@@ -26,6 +20,7 @@ namespace VMMachineManage.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.Clear();
             return View();
         }
 
@@ -34,11 +29,6 @@ namespace VMMachineManage.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
        
         /// <summary>
         /// 登录方法
@@ -51,35 +41,46 @@ namespace VMMachineManage.Controllers
         /// <param name="pwd">密码</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Login(string user, string pwd)
+       [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string userName, string userPwd)
         { 
-            
-            if (string.IsNullOrWhiteSpace(user))
+            if (string.IsNullOrWhiteSpace(userName)|| string.IsNullOrWhiteSpace(userPwd))
             {
                 return BadRequest("请输入用户名或密码!");
             }
+
             var loginuser = await _context.Common_PersonnelInfo.
-                FirstOrDefaultAsync(s => s.UserName == user);
-            if (user != loginuser.UserName)
-            {
-                // System.Net.Http.HttpRequestMessage
-                return BadRequest("没有该用户!");
-            }
-            if (pwd != loginuser.PassWord)
-            {
-                return BadRequest("密码错误!");
-            }
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name,user),
-                new Claim(ClaimTypes.Sid,loginuser.PersonnelId.ToString())
-            };
-            ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "login");
-            ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+                FirstOrDefaultAsync(s => s.UserName == userName && s.PassWord == userPwd);
 
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "MachineInfo");
+            if (loginuser.UserName!= userName)
+            {
+                return BadRequest("用户名不存在!");
+            }
+            if (loginuser.PassWord != userPwd)
+            {
+                return BadRequest("密码错误");
+            }
+            string json = JsonConvert.SerializeObject(loginuser);
+            // 存入Session
+            HttpContext.Session.Set("User", System.Text.Encoding.UTF8.GetBytes(json));
+            // 存入Session
+            if (loginuser.DepId == 1)
+            {
+                return RedirectToAction("Index", "MachineInfo");
+            }
+            else
+            {
+                return RedirectToAction("Index", "MyMachine");
+            }
+        }
+        /// <summary>
+        /// 退出
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult LoginOut()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction(nameof(Login));
         }
     }
 }

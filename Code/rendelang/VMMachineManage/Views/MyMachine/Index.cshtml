@@ -1,15 +1,12 @@
-﻿@model VMMachineManage.Models.MachineInfoViewModel
+﻿@model IEnumerable<VMMachineManage.Models.VMMachineInfoModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>我的虚拟机</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-controller="" asp-action="">
+<form asp-controller="MyMachine" asp-action="Index">
     <p>
         <input type="text" name="searchString" />
         <input class="btn btn-primary" type="submit" value="搜索" />
@@ -19,52 +16,96 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineSystem)
+                虚拟机IP
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineDiskCount)
+                操作系统
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineMemory)
+                硬盘大小
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachineState)
+                内存大小
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachApplyAndReturnInfo.OprationType)
+                审批状态
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MachineInfo[0].MachApplyAndReturnInfo.ExamineResult)
+                登录账号
+            </th>
+            <th>
+                登录密码
+            </th>
+            <th>
+                申请时间
+            </th>
+            <th>
+                归还时间
             </th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.MachineInfo) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachineSystem)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachineDiskCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachineMemory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachineState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachApplyAndReturnInfo.OprationType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachApplyAndReturnInfo.ExamineResult)
-            </td>
-            <td>
-                <a class="btn btn-danger" asp-action="Edit" asp-route-id="@item.MachApplyAndReturnInfo.ApplyAndReturnId">续租</a> |
-                <a class="btn btn-danger" asp-action="Edit" asp-route-id="@item.MachApplyAndReturnInfo.ApplyAndReturnId">归还</a> 
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.machineInfo.MachineIP)
+                </td>
+                <td>
+                    @if (item.machineInfo.MachineSystem == 0)
+                    {
+                        <span>Windows</span>
+                    }
+                    else
+                    {
+                        <span>Linux</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.machineInfo.MachineDiskCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.machineInfo.MachineMemory)
+                </td>
+
+                @if (item.MachApplyAndReturn.ExamineResult == 0)
+                {
+                    <td>待审批</td>
+
+                    <td></td>
+                    <td></td>
+                }
+                else if (item.MachApplyAndReturn.ExamineResult == 1)
+                {
+                    <td>拒绝</td>
+                    <td></td>
+                    <td></td>
+                }
+                else
+                {
+                    <td>同意</td>
+                    <td>@item.machineInfo.MachineUser</td>
+                    <td>@item.machineInfo.MachinePassword</td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachApplyAndReturn.ApplyTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachApplyAndReturn.ResultTime)
+                </td>
+                <td>
+                    @if (item.MachApplyAndReturn.ExamineResult == 2)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.MachApplyAndReturn.ApplyAndReturnId" class="btn btn-primary btn-sm">归还</a>
+
+                      
+                            <a class="btn btn-primary btn-sm" asp-action="Create" asp-route-id="@item.MachApplyAndReturn.ApplyAndReturnId">续租</a>
+                        
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

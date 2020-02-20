@@ -5,11 +5,12 @@
 }
 
 <h1>虚拟机管理</h1>
-
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/login.css" />
 <p>
     <a class="btn btn-primary" asp-action="Create">创建虚拟机</a>
 </p>
-<form asp-controller="" asp-action="">
+<form asp-controller="MachineInfo" asp-action="Index">
     <p>
         <input type="text" name="searchString" />
         <input class="btn btn-primary" type="submit" value="搜索" />
@@ -50,11 +51,11 @@
                     @Html.DisplayFor(modelItem => item.MachineIP)
                 </td>
                 <td>
-                    @if (item.MachineSystem==0)
+                    @if (item.MachineSystem == 0)
                     {
                         <span>Windows</span>
                     }
-                    @if (item.MachineSystem==1)
+                    @if (item.MachineSystem == 1)
                     {
                         <span>Linux</span>
                     }
@@ -66,17 +67,17 @@
                     @Html.DisplayFor(modelItem => item.MachineMemory)
                 </td>
                 <td>
-                    @if (item.MachineState==0)
+                    @if (item.MachineState == 0)
                     {
                         <span>空闲</span>
                     }
-                    @if ( item.MachineState==1)
+                    @if (item.MachineState == 1)
                     {
-                        <span>申请</span>
+                        <span>正在被申请</span>
                     }
-                    @if (item.MachineState==2)
+                    @if (item.MachineState == 2)
                     {
-                        <span>使用</span>
+                        <span>使用中</span>
                     }
 
                 </td>
@@ -87,11 +88,22 @@
                     @Html.DisplayFor(modelItem => item.MachinePassword)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.MachineID">编辑</a>
+                    @if (item.MachineState == 2)
+                    {
+                        <a class="btn btn-primary" asp-action="Recycling" asp-route-id="@item.MachineID">回收</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.MachineID">编辑</a>
+                    }
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.MachineID">查看</a>
                     <a class="btn btn-primary" asp-action="Delete" asp-route-id="@item.MachineID">删除</a>
                 </td>
             </tr>
         }
+
+   
+      
     </tbody>
 </table>
+

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<VMMachineManage.Models.VMMachineInfoModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>虚拟机审批</h1>
+
+
+<form asp-controller="AuitMachine" asp-action="Index">
+    <p>
+        <input type="text" name="searchString" />
+        <input class="btn btn-primary" type="submit" value="搜索" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                虚拟机IP
+            </th>
+            <th>
+                操作系统
+            </th>
+            <th>
+                硬盘大小
+            </th>
+            <th>
+                内存大小
+            </th>
+            <th>
+                审批状态
+            </th>
+            <th>
+                申请时间
+            </th>
+            <th>
+                归还时间
+            </th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.machineInfo.MachineIP)
+            </td>
+            <td>
+                @if (item.machineInfo.MachineSystem == 0)
+                {
+                    <span>Windows</span>
+                }
+                else
+                {
+                    <span>Linux</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.machineInfo.MachineDiskCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.machineInfo.MachineMemory)
+            </td>
+
+            @if (item.MachApplyAndReturn.ExamineResult == 0)
+            {
+                <td>待审批</td>
+            }
+            else if (item.MachApplyAndReturn.ExamineResult == 1)
+            {
+                <td>拒绝</td>
+            }
+            else
+            {
+                <td>同意</td>
+
+            }
+
+            <td>
+                @Html.DisplayFor(modelItem => item.MachApplyAndReturn.ApplyTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachApplyAndReturn.ResultTime)
+            </td>
+            <td><a class="btn btn-primary" href="AuitMachine/Edit?ApplyAndReturnId=@item.MachApplyAndReturn.ApplyAndReturnId&ExamineResult=2">同意</a>
+            <td>
+                <a class="btn btn-primary" href="AuitMachine/Edit?ApplyAndReturnId=@item.MachApplyAndReturn.ApplyAndReturnId&ExamineResult=1">拒绝</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-﻿@model VMMachineManage.Models.MachApplyAndReturnModel
+﻿@model VMMachineManage.Models.ApplyDataModel
 
 @{
     ViewData["Title"] = "Create";
@@ -11,23 +11,28 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MachineID" />
-            <div class="form-group">
-                <label asp-for="MachineSystem" class="control-label"></label>
-                <select disabled="disabled" asp-for="MachineSystem" class="form-control">
-                    <option value="0">Windows</option>
-                    <option value="1">Linux</option>
-                </select>
-                <span asp-validation-for="MachineSystem" class="text-danger"></span>
-            </div>
+            @*<input type="hidden" asp-for="MachineID" />*@
+        <div class="form-group">
+            <label class="control-label">操作系统</label>
+            @if (int.Parse(ViewData["MachineSystem"].ToString()) == 0)
+            {
+                <input class="form-control" type="text" readonly="readonly" value="Windows" />
+            }
+            else
+            {
+                <input class="form-control" type="text" readonly="readonly" value="Linux" />
+            }
+            <input name="machineSystem" type="text" readonly="readonly" hidden value="@ViewData["MachineSystem"]" />
+            <span asp-validation-for="MachineSystem" class="text-danger"></span>
+        </div>
             <div class="form-group">
                 <label asp-for="MachineDiskCount" class="control-label"></label>
-                <input disabled="disabled" asp-for="MachineDiskCount" class="form-control" />
+                <input readonly="readonly" asp-for="MachineDiskCount" class="form-control" />
                 <span asp-validation-for="MachineDiskCount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MachineMemory" class="control-label"></label>
-                <input disabled="disabled" asp-for="MachineMemory" class="form-control" />
+                <input readonly="readonly" asp-for="MachineMemory" class="form-control" />
                 <span asp-validation-for="MachineMemory" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -56,23 +61,28 @@
             </div>
             <div class="form-group">
                 <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" value="1" />
+                <select asp-for="Number" class="form-control">
+                    @for (int i = 1; i <= Model.Number; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select> 
                 <span asp-validation-for="Number" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <p><label asp-for="Remark" class="control-label"></label></p>
-                <textarea asp-for="Remark" class="form-control" value=" 文本域默认值"> </textarea>
-                <span asp-validation-for="Remark" class="text-danger"></span>
+                <textarea name="Remark" asp-for="Remark" class="form-control" value=" 文本域默认值"> </textarea>
+                @*<span asp-validation-for="Remark" class="text-danger"></span>*@
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="提交" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回列表t</a>
 </div>
 
 @section Scripts {
