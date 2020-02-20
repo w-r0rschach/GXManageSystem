@@ -30,7 +30,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>编号</th>
             <th>工号</th>
             <th>员工名称</th>
             <th>角色</th>
@@ -46,9 +45,6 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PersonnelId)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PersonnelNo)
                 </td>
